@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile App</title>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Auth Section -->
+        <div id="login-section" class="auth-section">
+            <div class="auth-form">
+                <div class="auth-tabs">
+                    <button onclick="window.switchTab('login')" id="login-tab" class="auth-tab active">Login</button>
+                    <button onclick="window.switchTab('register')" id="register-tab" class="auth-tab">Register</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="login-form">
+                    <h2>Login</h2>
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button onclick="window.login()" class="auth-button">Login</button>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" style="display: none;">
+                    <h2>Register</h2>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" required>
+                    </div>
+                    <button onclick="window.register()" class="auth-button">Register</button>
+                </div>
+
+                <div class="error-message" id="error-message"></div>
+            </div>
+        </div>
+
+        <!-- User Info Section -->
+        <div id="user-info">
+            <span id="user-email"></span>
+            <button onclick="window.logout()" class="logout-button">Logout</button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="window.switchSection('products')">Products</button>
+            <button class="nav-tab" onclick="window.switchSection('recently-viewed')">Recently Viewed</button>
+        </div>
+        
+        <!-- Products Section -->
+        <div id="products-section">
+            <div class="products-grid" id="products-grid"></div>
+        </div>
+        
+        <!-- Recently Viewed Section -->
+        <div id="recently-viewed-section" style="display: none;">
+            <div class="products-grid" id="products"></div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="window.closeProductModal()">&times;</span>
+            <div id="productDetails"></div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator Template -->
+    <template id="loading-indicator">
+        <div class="loading-indicator">
+            <div class="spinner"></div>
+            <span>Loading...</span>
+        </div>
+    </template>
+
+    <!-- Error Message Template -->
+    <template id="error-message-template">
+        <div class="error-message">
+            An error occurred. Please try again.
+        </div>
+    </template>
+
+    <!-- Product Card Template -->
+    <template id="product-card-template">
+        <div class="product-card">
+            <img class="product-image">
+            <div class="product-name"></div>
+            <div class="product-price"></div>
+            <div class="view-count"></div>
+            <div class="viewed-time"></div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

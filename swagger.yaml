@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Recently Viewed Products API
+  description: API for tracking and managing recently viewed products
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3001/api/v1
+    description: Development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        description:
+          type: string
+        image:
+          type: string
+
+    RecentlyViewed:
+      type: object
+      properties:
+        productId:
+          type: string
+        viewCount:
+          type: number
+        lastViewed:
+          type: string
+          format: date-time
+        firstViewed:
+          type: string
+          format: date-time
+        productData:
+          $ref: '#/components/schemas/Product'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+
+paths:
+  /products:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products/view:
+    post:
+      summary: Record a product view
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+                productData:
+                  $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Product view recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  viewCount:
+                    type: number
+                  lastViewed:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products/recent:
+    get:
+      summary: Get recently viewed products
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of recently viewed products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecentlyViewed'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
